@@ -1,0 +1,73 @@
+{
+    "name": "ros-tii",
+    "initializeCommand": "if test -f ${localWorkspaceFolder}/docker/.container_id; then rm ${localWorkspaceFolder}/docker/.container_id; fi",
+    // build from a dockerfile
+    first clone the marine_dev_docker repository as instructed on Bitbucket
+    "build": {
+        "dockerfile": "../../marine_dev_docker/Dockerfile"
+    },
+    // Pull the image from Dockerhub
+    // "image": "tiiarrc/marine_dev:v1.0.2",
+    //"overrideCommand": true,
+    "workspaceFolder": "/home/tii/workspace",
+    "runArgs": [
+        "--name", "ros-tii",
+        // For having UI working through Docker !
+        "-v", "/tmp/.X11-unix:/tmp/.X11-unix",
+        "-e", "DISPLAY",
+        // ROS environment variables
+        "-e", "ROS_MASTER_URI=http://localhost:11311",
+        "-e", "ROS_IP=127.0.0.1",
+        // for GPU and network sharing
+        "--privileged",
+        // give access to the host computer network (internet also!)
+        "--network", "host",
+        "--ipc", "host",
+        // give access to your personnal zsh history from within the docker container
+        "-v", "${localEnv:HOME}/.zsh_history:/home/tii/.zsh_history",
+        // mount the ros docker workspace inside docker
+        "-v", "${localWorkspaceFolder}/docker_workspace/:/home/tii/workspace",
+        // cf : https://arrc.atlassian.net/wiki/spaces/MARINE/pages/125665640/Git+setup
+        // Make your ssh keys accessible from within docker to commit / push to bitbucket
+        "-v", "${localEnv:HOME}/.ssh:/home/tii/.ssh/",
+        // make your global git config accessible from within docker
+        // also please make sure you set your global git username and email for clear
+        // git history
+        "-v", "${localEnv:HOME}/.gitconfig:/home/tii/.gitconfig",
+        // GPU, will probably not work on Mac computers
+        // or computers without an NVidia card. If in this
+        // case comment this line
+        // Otherwise, make sure you installed nvidia-container-runtime
+        // TODO: WIKI
+        "--gpus", "all",
+        // output the container id to a file for your to join it
+        "--cidfile", "${localWorkspaceFolder}/docker/.container_id",
+        // remove the container when we quit 
+        "--rm"
+    ],"extensions": [
+		"tacha-s.roslint",
+		"ms-iot.vscode-ros",
+		"ajshort.msg",
+		"pijar.ros-snippets",
+		"eamodio.gitlens",
+		"donjayamanne.githistory",
+		"mhutchie.git-graph",
+		"ms-python.python",
+		"visualstudioexptteam.vscodeintellicode",
+		"coenraads.bracket-pair-colorizer-2",
+		"ms-vscode.cpptools",
+		"aaron-bond.better-comments",
+		"dotjoshjohnson.xml",
+		"leodevbro.blockman",
+		"jeff-hykin.better-cpp-syntax",
+		"xaver.clang-format",
+		"oderwat.indent-rainbow",
+		"jgclark.vscode-todo-highlight",
+		"atlassian.atlascode",
+		"ms-toolsai.jupyter",
+		"ryu1kn.partial-diff",
+		"ms-python.vscode-pylance",
+		"mechatroner.rainbow-csv",
+		"gruntfuggly.todo-tree",
+	]
+}

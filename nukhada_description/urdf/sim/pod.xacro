@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find nukhada_description)/urdf/sim/propeller.xacro" />
+
+    <xacro:macro name="pod" params="robot_namespace parent_link prefix thruster_id">
+
+        <link name="pod_${prefix}">
+
+            <visual>
+                <geometry>
+                    <mesh filename="package://nukhada_description/meshes/pod.dae" scale="0.001 0.001 0.001" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </visual>
+
+            <collision>
+                <geometry>
+                    <cylinder length="${pod_length-pod_radius*2}" radius="${pod_radius}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+            </collision>
+            <collision>
+                <origin xyz="${pod_length/2-pod_radius} 0 0" />
+                <geometry>
+                    <sphere radius="${pod_radius}"/>
+                </geometry>
+            </collision>
+            <collision>
+                <origin xyz="-${pod_length/2-pod_radius} 0 0" />
+                <geometry>
+                    <sphere radius="${pod_radius}"/>
+                </geometry>
+            </collision>
+
+            <xacro:inertia_cylinder m="10" r="${pod_radius}" l="${pod_length}" />
+
+        </link>
+
+        <joint name="${parent_link}_to_pod" type="revolute">
+            <parent link="${parent_link}" />
+            <child link="pod_${prefix}" />
+
+            <origin xyz="0 0 -${pod_altitude}" />
+            <axis xyz="0 0 1" />
+
+            <limit lower="0" upper="0" effort="0" velocity="0" />
+            <!-- For now use them as fixed -->
+            <!-- <limit lower="-${pi}" upper="${pi}" effort="0" velocity="0" /> -->
+
+        </joint>
+
+        <xacro:thruster_macro robot_namespace="${robot_namespace}" thruster_id="${thruster_id}" parent_link="pod_${prefix}">
+            <origin xyz="-0.295076996 0 0" rpy="0 0 0"/>
+        </xacro:thruster_macro>
+
+    </xacro:macro>
+
+</robot>

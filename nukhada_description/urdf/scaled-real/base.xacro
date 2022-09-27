@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Loading some constants -->
+  <xacro:include filename="$(find uuv_descriptions)/urdf/common.urdf.xacro"/>
+  <!-- Loading vehicle's specific macros -->
+  <xacro:include filename="$(find nukhada_description)/urdf/scaled-real/snippets.xacro"/>
+
+  <xacro:include filename="$(find nukhada_description)/urdf/scaled-real/hull.xacro" />
+
+  <!-- Properties -->
+  <xacro:property name="length" value="1" />
+  <xacro:property name="width" value="0.55" />
+
+  <xacro:property name="hull_length" value="1" />
+  <xacro:property name="hull_width" value="0.15" />
+  <xacro:property name="hull_height" value="0.15" />
+
+  <xacro:property name="width_between_hulls" value="0.25" />
+
+  <xacro:property name="pod_altitude" value="0.1" />
+  <xacro:property name="pod_length" value="0.1" />
+  <xacro:property name="pod_radius" value="0.05" />
+
+  <xacro:property name="propeller_length" value="0.08" />
+  <xacro:property name="propeller_radius" value="0.05" />
+
+  <xacro:property name="thruster_ids" value="${dict([('port',0), ('starboard',1)])}"/>
+
+  <!-- Vehicle macro -->
+  <xacro:macro name="nukhada_base" params="namespace">
+
+    <!-- Rigid body description of the base link -->
+    <link name="${namespace}/base_link"></link>
+
+    <link name="chassis">
+      <xacro:inertia_cuboid m="5" l="1" w="${width_between_hulls}" h="0.15" />
+
+      <visual>
+        <origin xyz="0 0 0.1" rpy="0 0 0" />
+        <geometry>
+          <box size="1 ${width_between_hulls+hull_width} 0.15" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.1" rpy="0 0 0" />
+        <geometry>
+          <box size="1 ${width_between_hulls+hull_width} 0.15" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="base_link_to_chassis" type="fixed">
+      <parent link="${namespace}/base_link" />
+      <child link="chassis" />
+    </joint> 
+
+    <xacro:hull robot_namespace="${namespace}" parent_link="chassis" prefix="port" reflect="1" thruster_id="0"/>
+    <xacro:hull robot_namespace="${namespace}" parent_link="chassis" prefix="starboard" reflect="-1" thruster_id="1"/>
+  </xacro:macro>
+</robot>

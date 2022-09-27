@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find nukhada_description)/urdf/sim/pod.xacro" />
+
+    <xacro:macro name="hull" params="robot_namespace parent_link prefix reflect thruster_id">
+
+        <link name="hull_${prefix}">
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://nukhada_description/meshes/hull.dae" scale="0.001 0.001 0.001" />
+                </geometry>
+            </visual>
+
+            <!-- WARNING(Jeremy): these collisions mess with the buoyancy plugin -->
+
+            <!-- <collision>
+                <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+                <geometry>
+                    <cylinder length="${hull_length-hull_height}" radius="${hull_height/2}"/>
+                </geometry>
+            </collision> -->
+            <!-- <collision>
+                <origin xyz="${hull_length/2-hull_height/2} 0 0" />
+                <geometry>
+                    <sphere radius="${hull_height/2}"/>
+                </geometry>
+            </collision> -->
+            <!-- <collision>
+                <origin xyz="-${hull_length/2-hull_height/2} 0 0" />
+                <geometry>
+                    <sphere radius="${hull_height/2}"/>
+                </geometry>
+            </collision> -->
+
+            <xacro:inertia_cylinder m="50" r="${hull_height/2}" l="${hull_length}" />
+
+        </link>
+
+        <joint name="${parent_link}_to_${prefix}_hull" type="fixed">
+            <parent link="${parent_link}" />
+            <child link="hull_${prefix}" />
+
+            <origin xyz="0 ${reflect*width_between_hulls} 0" />
+        </joint>
+        
+        <xacro:pod 
+            robot_namespace="${robot_namespace}"
+            parent_link="hull_${prefix}" 
+            prefix="${prefix}"
+            thruster_id="${thruster_id}" />
+
+    </xacro:macro>
+
+</robot>

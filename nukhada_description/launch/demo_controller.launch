@@ -1,0 +1,67 @@
+<launch>
+    <!-- If you want to generate a ROS bag with the recorded simulated data, set this flag to true -->
+    <arg name="record" default="false"/>
+    <arg name="use_sim" default="true"/>
+    <arg name="mode" default="default" />
+    <arg name="fake_gps" default="villa_pool" />
+
+    <!-- Add the RexROV vehicle to the simulation (namespace: rexrov) -->
+    <include file="$(find nukhada_description)/launch/upload.launch">
+        <arg name="x" default="-50"/>
+        <arg name="y" default="-50"/>
+        <arg name="z" default="0"/>
+        <arg name="yaw" default="0"/>
+
+        <arg name="mode" value="$(arg mode)" />
+        <arg name="use_sim" value="$(arg use_sim)" />
+    </include>
+
+
+    <!-- Start the controller -->
+    <group if="$(eval arg('mode').startswith('default'))">
+        <include file="$(find nukhada_control)/launch/start_dp_controller.launch">
+            <arg name="uuv_name" value="nukhada"/>
+            <arg name="use_sim" value="$(arg use_sim)" />
+
+            <arg name="output_dir" value="$(find nukhada_control)/config"/>
+            <arg name="config_file" value="$(find nukhada_control)/config/thruster_manager.yaml"/>
+            <arg name="tam_file" value="$(find nukhada_control)/config/TAM.yaml"/>
+        </include>
+    </group>
+    <group unless="$(eval arg('mode').startswith('default'))">
+        <include file="$(find nukhada_control)/launch/start_dp_controller.launch">
+            <arg name="uuv_name" value="nukhada"/>
+            <arg name="use_sim" value="$(arg use_sim)" />
+
+            <arg name="output_dir" value="$(find nukhada_control)/config"/>
+            <arg name="config_file" value="$(find nukhada_control)/config/thruster_manager_scaled.yaml"/>
+            <arg name="tam_file" value="$(find nukhada_control)/config/TAM.yaml"/>
+        </include>
+    </group>
+    
+    <!-- Start the recording node  -->
+    <include file="$(find uuv_gazebo)/launch/controller_demos/record_demo.launch">
+        <arg name="record" value="$(arg record)"/>
+    </include>
+
+    <!-- Dummy world -> map statif TF for Rviz AerialMapDisplay plugin -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_fake" args="0 0 0 0 0 0 map world" />
+
+    <!-- Publish Al Raha creek coordinates for visualization -->
+    <node pkg="rostopic" type="rostopic" name="fake_gps_fix" args="pub /gps/fix sensor_msgs/NavSatFix --latch --file=$(find nukhada_description)/config/$(arg fake_gps).gps" />
+
+    <!-- Open RViz for visualization of sensor data and visualization markers -->
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find nukhada_description)/rviz/nukhada.rviz"/>
+
+    <!-- <node name="coverage_planner" pkg="polygon_coverage_ros" type="coverage_planner" output="screen" clear_params="true"> -->
+        <!-- <rosparam command="load" file="$(find nukhada_control)/config/coverage_planner.yaml"/> -->
+        <!-- Polygon, altitude, and world frame ID -->
+        <!--<rosparam command="load" file="$(find polygon_coverage_ros)/cfg/polygons/example_polygon_epfl_simple.yaml"/>-->
+    <!-- </node> -->
+
+    <!--
+    you can then send some waypoints to the vehicle to see it working
+
+    >> roslaunch nukhada_control send_waypoints_file.launch
+    -->
+</launch>

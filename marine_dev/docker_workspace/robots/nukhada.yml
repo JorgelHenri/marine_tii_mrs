@@ -1,0 +1,33 @@
+repositories:
+  dave:
+    type: git
+    url: https://github.com/Field-Robotics-Lab/dave.git
+    version: 7df1558d77b41d2ca7702fce34ceecf9b60cb548
+  dockwater:
+    type: git
+    url: https://github.com/Field-Robotics-Lab/dockwater.git
+    version: 5fbd94bec7033f041dd9f018f706884b563e96fc
+  ds_msgs:
+    type: git
+    url: https://github.com/Field-Robotics-Lab/ds_msgs.git
+    version: 125e753679eae7f0e646b8f568d70b35d970a22b
+  ds_sim:
+    type: git
+    url: https://github.com/Field-Robotics-Lab/ds_sim.git
+    version: cc19f57a3accb719fbb0a271048c1e0c202865b9
+  uuv_simulator:
+    type: git
+    url: git@bitbucket.org:autonomouscv/uuv_simulator.git
+    version: c9d61d1fb978f472eef0d963a3e6256695eae4eb
+  nukhada_description:
+    type: git
+    url: git@bitbucket.org:autonomouscv/nukhada_description.git
+    version: marine-aerial
+  hector_gazebo:
+    type: git
+    url: https://github.com/tu-darmstadt-ros-pkg/hector_gazebo
+    version: df4a266c10468a77f67864298734e13caf483b0f
+  nukhada_control:
+    type: git
+    url: git@bitbucket.org:autonomouscv/nukhada_control.git
+    version: 3e78f99f7d9f2596eca95340c5fb41c60b53a9c8

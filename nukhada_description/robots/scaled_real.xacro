@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="nukhada" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+  <xacro:arg name="debug" default="0"/>
+  <xacro:arg name="namespace" default="nukhada"/>
+  <!-- Include the ROV macro file -->
+  <xacro:include filename="$(find nukhada_description)/urdf/scaled-real/base.xacro"/>
+
+  <!-- Create the nukhada -->
+  <xacro:nukhada_base namespace="$(arg namespace)"></xacro:nukhada_base>
+
+</robot>

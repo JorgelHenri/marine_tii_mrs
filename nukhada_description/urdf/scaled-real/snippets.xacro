@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--                                                                      -->
+  <!-- MACRO FOR THRUSTER UNITS  -->
+  <!--                                                                      -->
+
+  <!-- Provide the propeller mesh in a separate file with the rotation axis
+  over propeller's frame X-axis in DAE (Collada) or STL format.
+  -->
+  <xacro:property name="prop_mesh_file" value="file://$(find nukhada_description)/meshes/propeller.dae"/>
+
+  <!--
+    Thruster macro with integration of joint and link. The thrusters should
+    be initialized in the actuators.xacro file.
+  -->
+  <xacro:macro name="thruster_macro" params="robot_namespace thruster_id parent_link *origin">
+
+    <!--
+    Dummy link as place holder for the thruster frame,
+    since thrusters can often be inside the collision geometry
+    of the vehicle and may cause internal collisions if set otherwise
+    -->
+    <link name="${robot_namespace}/thruster_${thruster_id}">
+
+      <visual>
+        <geometry>
+          <mesh filename="${prop_mesh_file}" scale="0.001 0.001 0.001" />
+        </geometry>
+      </visual>
+
+      <inertial>
+        <mass value="0.001" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.000000017" ixy="0.0" ixz="0.0"
+               iyy="0.000000017" iyz="0.0"
+               izz="0.000000017" />
+      </inertial>
+    </link>
+
+    <!-- Joint between thruster link and vehicle base link -->
+    <joint name="${robot_namespace}/thruster_${thruster_id}_joint" type="continuous">
+      <xacro:insert_block name="origin" />
+      <axis xyz="1 0 0" />
+      <parent link="${parent_link}" />
+      <child link="${robot_namespace}/thruster_${thruster_id}" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="inertia_cylinder" params="m r l">
+        <inertial>
+            <mass value="${m}" />
+            <inertia ixx="${1/12*m*(3*r*r*r+l*l)}" ixy="0.0" ixz="0.0"
+                iyy="${1/12*m*(3*r*r*r+l*l)}" iyz="0.0"
+                izz="${1/2*m*r*r}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="inertia_cuboid" params="m l w h">
+        <inertial>
+            <mass value="${m}" />
+            <inertia ixx="${1/12*m*(w*w+h*h)}" ixy="0.0" ixz="0.0"
+                iyy="${1/12*m*(l*l+h*h)}" iyz="0.0"
+                izz="${1/12*m*(l*l+w*w)}" />
+        </inertial>
+    </xacro:macro>
+
+</robot>

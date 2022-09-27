@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find nukhada_description)/urdf/scaled-sim/propeller.xacro" />
+
+    <xacro:macro name="pod" params="robot_namespace parent_link prefix thruster_id">
+
+        <link name="pod_${prefix}">
+
+            <!--<visual>
+                <geometry>
+                    <cylinder length="${pod_length-pod_radius*2}" radius="${pod_radius}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+            </visual>-->
+
+            <collision>
+                <geometry>
+                    <cylinder length="${pod_length}" radius="${pod_radius}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+            </collision>
+
+            <xacro:inertia_cylinder m="1" r="${pod_radius}" l="${pod_length}" />
+
+        </link>
+
+        <joint name="${parent_link}_to_pod" type="fixed">
+            <parent link="${parent_link}" />
+            <child link="pod_${prefix}" />
+
+            <origin xyz="0 0 -${pod_altitude}" />
+        </joint>
+
+        <xacro:thruster_macro robot_namespace="${robot_namespace}" thruster_id="${thruster_id}" parent_link="pod_${prefix}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:thruster_macro>
+
+    </xacro:macro>
+
+</robot>

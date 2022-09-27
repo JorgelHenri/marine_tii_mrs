@@ -1,0 +1,58 @@
+inertial_frame_id: world
+waypoints:
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.044390278850074, -90.52389860619795, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.619829126702896, -90.55046541755624, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [32.79293206707408, -90.14294599140493, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [32.7408339652585, -88.89328742673004, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.614964329258385, -89.30298751602518, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.61009953181389, -88.05550961449413, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [32.68873586344294, -87.64362886205512, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [32.63663776162737, -86.3939702973802, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.60523473436939, -86.80803171296307, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.60036993692488, -85.56055381143202, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [32.58453965981181, -85.14431173270532, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [38.61200221235883, -84.17533380272923, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [41.59550513948038, -84.31307590990096, 0]
+  use_fixed_heading: false
+- heading: 0
+  max_forward_speed: 0.6
+  point: [40.771608931038585, -90.51130486033529, 0]
+  use_fixed_heading: false

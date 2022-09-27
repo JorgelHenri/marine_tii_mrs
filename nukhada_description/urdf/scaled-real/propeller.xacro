@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:macro name="propeller" params="parent_link prefix id">
+
+        <link name="${robot_namespace}/thruster_${thruster_id}">
+
+            <visual>
+                <geometry>
+                    <cylinder length="${propeller_length}" radius="${propeller_radius}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </visual>
+
+            <collision>
+                <origin xyz="0.034954872 0 0" rpy="0 ${pi/2} 0" />
+                <geometry>
+                    <cylinder length="${propeller_length}" radius="${propeller_radius}" />
+                </geometry>
+            </collision>
+
+            <xacro:inertia_cylinder m="0.01" r="${propeller_radius}" l="${propeller_length}" />
+
+        </link>
+
+        <joint name="${robot_namespace}/thruster_${thruster_id}_joint" type="fixed">
+            <parent link="${parent_link}" />
+            <child link="${robot_namespace}/thruster_${thruster_id}" />
+
+            <origin xyz="-0.1 0 0" />
+            <axis xyz="1 0 0" />
+
+            <limit effort="0" velocity="0" />
+        </joint>
+
+    </xacro:macro>
+
+</robot>
